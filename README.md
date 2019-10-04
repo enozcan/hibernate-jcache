@@ -1,6 +1,6 @@
 # Using Jcache SPI for using Hazelcast as L2C for Hibernate
 
-This is an alternative approach to use Hazelcast as caching provider for Hibernate.
+This is an alternative approach of using `Hazelcast-hibernate` plugin to use Hazelcast as caching provider for Hibernate.
 The plugin can be found [here](www.github.com/hazelcast/hazelcast/hibernate5)
 
 ## About Jcache
@@ -14,19 +14,21 @@ L2C can be used for SessionFactory objects in Hibernate.
 
 You can see the difference between the modes [here](https://hazelcast.zendesk.com/hc/en-us/articles/115004441586-What-s-the-difference-between-client-server-vs-embedded-topologies-)
 
-* P2P Mode
+### P2P Mode
 
 Hazelcast Instance along with your Hibernate application.
 
-- Low latency to get / put data to Hazelcast cache regions.
-- Scalability is not independent from the application itself.
+    - Low latency to get / put data to Hazelcast cache regions.
+    - Scalability is not independent from the application itself.
 
-* Client Mode
+### Client Mode
 
-- Relatively higher latency to get / put data to Hazelcast cache regions.
-- Can be scaled independent from the application. 
-- Data resides in L2C can be available even a SessionFactory is closed. So this makes L2C available
-across SessionFactories.
+    - Relatively higher latency to get / put data to Hazelcast cache regions.
+    - Can be scaled independent from the application. 
+    - Data resides in L2C can be available even a SessionFactory is closed. So this makes L2C available
+    across SessionFactories.
 
+ ## Configuration
  
+ ## etc. 
 
