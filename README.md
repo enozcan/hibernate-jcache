@@ -12,21 +12,51 @@ L2C can be used for SessionFactory objects in Hibernate.
 
 ## Integrating Hazelcast
 
-You can see the difference between the modes [here](https://hazelcast.zendesk.com/hc/en-us/articles/115004441586-What-s-the-difference-between-client-server-vs-embedded-topologies-)
+Include `hibernate-jcache` dependency in your program. The version must be same with
+the `hibernate-core` version. 
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+            <version>5.4.3.Final</version>
+        </dependency>
 
-### P2P Mode
+### Hibernate Config
 
-Hazelcast Instance along with your Hibernate application.
+For Hibernate 5.2.x:
+```xml
+<property name="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.JCacheRegionFactory</property>
+```
 
-    - Low latency to get / put data to Hazelcast cache regions.
-    - Scalability is not independent from the application itself.
+For Hibernate 5.3.0 and higher:
+```xml
+    <property name="hibernate.cache.region.factory_class">jcache</property>
+```
+### Hazelcast Config
 
-### Client Mode
 
-    - Relatively higher latency to get / put data to Hazelcast cache regions.
-    - Can be scaled independent from the application. 
-    - Data resides in L2C can be available even a SessionFactory is closed. So this makes L2C available
-    across SessionFactories.
+`CLIENT`: You can connect to an existing Hazelcast cluster and store the cache data there. Then you can scale the cluster
+up or down free from your app. Data resides in L2C can be available even a SessionFactory is closed. So this makes L2C available
+across SessionFactories. 
+            
+`EMBEDDED`: A new Hazelcast instance is created when your application is run. This instance cannot be scaled up or 
+down unless you run another Hibernate application with the same server config. Latency of communicating with 
+Hazelcast Cluster will be lower. 
+           
+
+- Using Native Client
+```xml
+<property name="hibernate.javax.cache.provider">com.hazelcast.client.cache.impl.HazelcastClientCachingProvider</property>
+<property name="hibernate.javax.cache.uri">hazelcast-client.xml</property>
+```
+
+- Using Embedded Hazelcast Instance
+```xml
+<property name="hibernate.javax.cache.provider">com.hazelcast.cache.impl.HazelcastServerCachingProvider</property>
+<property name="hibernate.javax.cache.uri">hazelcast.xml</property>
+```
+
+
+You can see the difference between client and embedded version [here](https://hazelcast.zendesk.com/hc/en-us/articles/115004441586-What-s-the-difference-between-client-server-vs-embedded-topologies-)
 
  ## Configuration
  
