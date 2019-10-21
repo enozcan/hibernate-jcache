@@ -1,5 +1,6 @@
 package jcache.sample.server;
 
+import com.hazelcast.core.Hazelcast;
 import jcache.sample.server.entity.Item;
 import jcache.sample.server.util.HibernateUtil;
 import org.hibernate.Session;
@@ -9,24 +10,24 @@ import static java.lang.System.exit;
 
 
 // TODO: Cache region names
-public class L2Cache {
+public class EntityCache {
 
     public static void main(String[] args){
 
-        Session session1, session2, session3;
-        Transaction tx1, tx2, tx3;
+        Session session1, session2, session3, session4;
+        Transaction tx1, tx2, tx3, tx4;
         Item item;
 
 
         // Store an hazelcast.hibernate.jcache.Entity.Item with id = 1
-        // L2C miss and put are expected
+        // L2C put is expected
         session1 = HibernateUtil.getSession();
         tx1 = session1.getTransaction();
         tx1.begin();
         session1.save(new Item(1,"New Hazelcast Item",12345L));
         tx1.commit();
-        System.out.println("SESSION 1, Factory L2C stats:" + HibernateUtil.getSecondLevelCacheStats());
         session1.close();
+        HibernateUtil.evictAllRegions();
 
         // Get recently stored value
         // Data is expected to be fetched from L2 Cache, not from database.
@@ -35,9 +36,8 @@ public class L2Cache {
         tx2 = session2.getTransaction();
         tx2.begin();
         item = session2.get(Item.class,1);
-        System.out.println("Item fetched: "+ item);
-        System.out.println("SESSION 2, Factory L2C stats:" + HibernateUtil.getSecondLevelCacheStats());
         session2.close();
+        System.out.println("Item fetched: "+ item);
 
         // Get last accessed data from another session.
         // Data is expected to be fetched from L2 Cache, not from database.
@@ -49,12 +49,22 @@ public class L2Cache {
         System.out.println("Item fetched: "+ item);
         tx3.commit();
         session3.close();
-        System.out.println("SESSION 3, Factory L2C stats:" + HibernateUtil.getSecondLevelCacheStats());
 
+        // Evict the cache
+        HibernateUtil.evictAllRegions();
 
+        // Data is expected to be fetched from database, not from L2C.
+        // L2C miss & put are expected
+        session4 = HibernateUtil.getSession();
+        tx4 = session4.getTransaction();
+        tx4.begin();
+        item = session4.get(Item.class,1);
+        System.out.println("Item fetched: "+ item);
+        tx4.commit();
+        session4.close();
 
         HibernateUtil.closeFactory();
-        exit(0);
+        //Hazelcast.shutdownAll();
 
     }
 

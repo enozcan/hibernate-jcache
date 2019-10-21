@@ -15,7 +15,7 @@ public class HibernateUtil {
     static {
         try {
             Configuration cfg = new Configuration();
-            cfg.configure("hibernate.cfg.xml");//default URI: "hibernate.cfg.xml"
+            cfg.configure("hibernate.cfg.xml"); //default URI: "hibernate.cfg.xml"
             sessionFactory = cfg.buildSessionFactory();
         } catch (HibernateException e) {
             e.printStackTrace();
@@ -33,28 +33,12 @@ public class HibernateUtil {
         sessionFactory.getCache().evictAllRegions();
     }
 
-    public static String getSecondLevelCacheStats(){
-        assert !sessionFactory.isClosed();
-        long hit,miss,put;
-        Statistics stats = sessionFactory.getStatistics();
-        hit = stats.getSecondLevelCacheHitCount();
-        miss = stats.getSecondLevelCacheMissCount();
-        put = stats.getSecondLevelCachePutCount();
-        return String.format("hit: %d\t miss: %d\t put: %d\n", hit,miss,put);
-    }
-
-    public static String getQueryCacheStats(){
-        assert !sessionFactory.isClosed();
-        long hit,miss,put;
-        Statistics stats = sessionFactory.getStatistics();
-        hit = stats.getQueryCacheHitCount();
-        miss = stats.getQueryCacheMissCount();
-        put = stats.getQueryCachePutCount();
-        return String.format("hit: %d\t miss: %d\t put: %d\n", hit,miss,put);
-    }
-
     public static void closeFactory(){
         assert !sessionFactory.isClosed();
         sessionFactory.close();
+    }
+
+    public static SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 }

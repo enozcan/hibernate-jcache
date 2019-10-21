@@ -3,12 +3,17 @@
         "http://hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
 
+
+    
     <session-factory>
+        <!-- Defines a name to be used as a prefix to all second-level cache region names. -->
+        <property name="hibernate.cache.region_prefix">hazelcast-region</property>
+
         <!-- JDBC connection settings -->
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://localhost:3306/hibernate_demo?createDatabaseIfNotExist=true</property>
         <property name="connection.username">root</property>
-        <property name="connection.password">root1234</property>
+        <property name="connection.password">root</property>
 
 
         <!-- Defines the SQL dialect used in Hibernate's application -->
@@ -25,8 +30,10 @@
         <property name="hibernate.cache.use_second_level_cache">true</property>
 
         <!-- Enable Jcache SPI -->
+
             <!-- For Hibernate 5.3.0 and higher -->
             <property name="hibernate.cache.region.factory_class">jcache</property>
+
             <!-- For Hibernate 5.2.x -->
             <!-- property name="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.JCacheRegionFactory</property -->
 
@@ -48,5 +55,8 @@
 
         <!-- Mapping to hibernate mapping files -->
         <mapping resource="Item.hbm.xml"/>
+        <mapping class="jcache.sample.server.entity.Department"/>
+        <mapping class="jcache.sample.server.entity.Employee"/>
+
     </session-factory>
 </hibernate-configuration>
