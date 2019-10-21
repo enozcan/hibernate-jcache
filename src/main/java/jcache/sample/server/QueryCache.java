@@ -7,9 +7,6 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
 
-import static java.lang.System.exit;
-
-// TODO: Cache region names
 public class QueryCache {
 
 

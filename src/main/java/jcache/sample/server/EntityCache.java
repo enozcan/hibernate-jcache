@@ -6,10 +6,6 @@ import jcache.sample.server.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import static java.lang.System.exit;
-
-
-// TODO: Cache region names
 public class EntityCache {
 
     public static void main(String[] args){
@@ -64,7 +60,7 @@ public class EntityCache {
         session4.close();
 
         HibernateUtil.closeFactory();
-        //Hazelcast.shutdownAll();
+        Hazelcast.shutdownAll();
 
     }
 

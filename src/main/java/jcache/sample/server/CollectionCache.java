@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CollectionCache {
+
     public static void main(String[] args){
 
         initializeDatabase();
@@ -32,7 +33,6 @@ public class CollectionCache {
             System.out.println("\tEmployee Name : " + employee.getName());
         }
         session1.close();
-        //HibernateUtil.printEntityCacheStats();
 
         //Get Department again. Cache hit is expected.
         session2 = HibernateUtil.getSession();
@@ -48,9 +48,8 @@ public class CollectionCache {
             System.out.println("\tEmployee Name : " + employee.getName());
         }
         session2.close();
-        //HibernateUtil.printEntityCacheStats();
         HibernateUtil.closeFactory();
-        //Hazelcast.shutdownAll();
+        Hazelcast.shutdownAll();
 
     }
 
