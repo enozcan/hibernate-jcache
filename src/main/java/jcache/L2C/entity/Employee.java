@@ -1,4 +1,4 @@
-package jcache.sample.server.entity;
+package jcache.L2C.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

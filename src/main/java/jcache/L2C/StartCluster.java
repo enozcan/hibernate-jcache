@@ -1,4 +1,4 @@
-package jcache.sample.server;
+package jcache.L2C;
 
 import com.hazelcast.core.Hazelcast;
 

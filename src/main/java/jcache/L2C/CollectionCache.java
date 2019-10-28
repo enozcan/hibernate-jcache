@@ -1,9 +1,9 @@
-package jcache.sample.server;
+package jcache.L2C;
 
 import com.hazelcast.core.Hazelcast;
-import jcache.sample.server.entity.Department;
-import jcache.sample.server.entity.Employee;
-import jcache.sample.server.util.HibernateUtil;
+import jcache.L2C.util.HibernateUtil;
+import jcache.L2C.entity.Department;
+import jcache.L2C.entity.Employee;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

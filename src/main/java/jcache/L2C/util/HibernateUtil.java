@@ -1,4 +1,4 @@
-package jcache.sample.server.util;
+package jcache.L2C.util;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;

@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-    <class name = "jcache.sample.server.entity.Item" table = "ITEM">
+    <class name = "jcache.L2C.entity.Item" table = "ITEM">
 
         <meta attribute = "class-description">
             This class represents a sample hazelcast.hibernate.ss.entity.Item.

@@ -1,4 +1,4 @@
-package jcache.sample.server.entity;
+package jcache.L2C.entity;
 
 public class Item {
 
@@ -44,7 +44,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return "hazelcast.hibernate.jcache.Entity.Item{" +
+        return "jcache.L2C.Entity.Item{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
