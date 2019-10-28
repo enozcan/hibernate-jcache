@@ -16,7 +16,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "DEPARTMENT")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(region = "Dpt-Entity-Cache",usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Department {
 
     @Id
@@ -29,7 +29,7 @@ public class Department {
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "department")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @Cache(region = "Emp-Collection-Cache",usage = CacheConcurrencyStrategy.READ_WRITE)
     private List<Employee> employees = new ArrayList<Employee>();
 
     public Department() {}

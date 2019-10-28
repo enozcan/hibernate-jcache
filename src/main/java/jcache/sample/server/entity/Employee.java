@@ -14,7 +14,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "EMPLOYEE")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(region = "Emp-Entity-Cache",usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Employee {
 
     @Id

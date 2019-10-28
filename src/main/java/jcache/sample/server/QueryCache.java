@@ -12,7 +12,7 @@ public class QueryCache {
 
     private static final String QUERY_STRING = "select i from Item i where i.id < 102";
     private static final String QUERY_STRING2 = "select i from Item i where i.id > 101";
-    private static final String QUERY_CACHE_REGION = "Item-query-cache";
+    private static final String QUERY_CACHE_REGION = "Item-Query-Cache";
 
     public static void main(String[] args){
 
@@ -56,7 +56,6 @@ public class QueryCache {
         queryResults =  executeQuery(QUERY_STRING2,session4);
         printList(queryResults);
         session4.close();
-
         HibernateUtil.closeFactory();
         Hazelcast.shutdownAll();
     }

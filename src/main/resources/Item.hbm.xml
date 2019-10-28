@@ -11,8 +11,8 @@
         </meta>
 
         <cache
-                usage="read-write"
-                region="ItemL2CacheRegion"
+                usage="nonstrict-read-write"
+                region="Item-Entity-Cache"
                 include="all"
         />
 
