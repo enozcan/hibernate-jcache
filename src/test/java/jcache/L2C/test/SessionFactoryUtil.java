@@ -13,7 +13,7 @@ import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
-public class SessionFactoryRule {
+public class SessionFactoryUtil {
 
 
     private SessionFactory sessionFactory;
@@ -21,7 +21,7 @@ public class SessionFactoryRule {
     private Session session;
     private boolean useHazelcastClient;
 
-    public SessionFactoryRule(boolean useHazelcastClient) {
+    public SessionFactoryUtil(boolean useHazelcastClient) {
         this.useHazelcastClient = useHazelcastClient;
         sessionFactory = createSessionFactory();
         createSession();

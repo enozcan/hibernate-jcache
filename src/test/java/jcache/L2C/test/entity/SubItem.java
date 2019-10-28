@@ -19,10 +19,15 @@ public class SubItem {
     private String name;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "item")
+    @ManyToOne
+    @JoinColumn(name = "ITEM_ID")
     private Item item;
 
+    public SubItem(int id, String name, Item item) {
+        this.id = id;
+        this.name = name;
+        this.item = item;
+    }
 
     public Item getItem() {
         return item;
@@ -56,4 +61,13 @@ public class SubItem {
         this.name = name;
     }
 
+
+    @Override
+    public String toString() {
+        return "SubItem{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", item=" + item +
+                '}';
+    }
 }

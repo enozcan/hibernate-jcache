@@ -45,8 +45,14 @@ public class DatabaseEntitiesTest extends HibernateTestBase {
     public void testSubItemRelationsOfItems(){
         Session session = sfr.getSession();
 
-        Item item2 = session.get(Item.class,3);
-        List<SubItem> subItems = item2.getSubItems();
+        Item item3 = session.get(Item.class,31);
+        List<SubItem> subItems = item3.getSubItems();
+
+        for (SubItem s : subItems) {
+            System.out.println(s);
+        }
+
+
 
         // TODO: getSubItems returns a bag containing the one sublist only.
         // all the subitems have to be fetched here.
