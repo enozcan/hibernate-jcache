@@ -19,8 +19,7 @@ public class DatabaseEntitiesTest extends HibernateTestBase {
 
     @Test
     public void testItemsOnDatabaseStartUp(){
-        Session session = sfr.getSession();
-
+        Session session = sfUtil.getSession();
 
         List<Item> items = session.createQuery("SELECT i from Item i ").getResultList();
 
@@ -29,33 +28,55 @@ public class DatabaseEntitiesTest extends HibernateTestBase {
         for (Item i : items) {
             Assert.assertTrue(i.getName().equals("item-"+i.getId()));
         }
+
+        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCacheHitCount());
+        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCacheMissCount());
+        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCachePutCount());
     }
 
     @Test
     public void testSubItemsOnDatabaseStartUp(){
-        Session session = sfr.getSession();
+
+        Session session = sfUtil.getSession();
 
         List<SubItem> subItems = session.createQuery("SELECT si from SubItem si ").getResultList();
 
         Assert.assertEquals(10,subItems.size());
+
+        for(SubItem si : subItems) {
+            Assert.assertTrue(si.getName().equals("subitem-"+si.getId()));
+        }
+
     }
 
 
     @Test
     public void testSubItemRelationsOfItems(){
-        Session session = sfr.getSession();
+        Session session = sfUtil.getSession();
 
-        Item item3 = session.get(Item.class,31);
-        List<SubItem> subItems = item3.getSubItems();
+        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCacheHitCount());
+        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCacheMissCount());
+        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCachePutCount());
 
-        for (SubItem s : subItems) {
-            System.out.println(s);
-        }
+        Item item1 = session.get(Item.class,1);
+        Item item2 = session.get(Item.class,2);
+        Item item3 = session.get(Item.class,3);
+        Item item4 = session.get(Item.class,4);
+
+        Assert.assertNotNull(item1);
+        Assert.assertNotNull(item2);
+        Assert.assertNotNull(item3);
+        Assert.assertNotNull(item4);
+
+        Assert.assertEquals(1,item1.getSubItems().size());
+        Assert.assertEquals(2,item2.getSubItems().size());
+        Assert.assertEquals(3,item3.getSubItems().size());
+        Assert.assertEquals(4,item4.getSubItems().size());
 
 
-
-        // TODO: getSubItems returns a bag containing the one sublist only.
-        // all the subitems have to be fetched here.
+        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCacheHitCount());
+        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCacheMissCount());
+        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCachePutCount());
     }
 }
 

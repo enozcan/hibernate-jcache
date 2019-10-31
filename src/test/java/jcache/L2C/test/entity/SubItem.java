@@ -1,6 +1,5 @@
 package jcache.L2C.test.entity;
 
-import jcache.L2C.entity.Department;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Cache;
 
@@ -38,11 +37,6 @@ public class SubItem {
     }
 
     public SubItem() {
-    }
-
-    public SubItem(String name, int id) {
-        this.id = id;
-        this.name = name;
     }
 
     public int getId() {
