@@ -37,12 +37,12 @@
 
         <!-- Enable Hazelcast as caching provider -->
             <!-- P2P Mode -->
-            <property name="hibernate.javax.cache.provider">com.hazelcast.cache.impl.HazelcastServerCachingProvider</property>
-            <property name="hibernate.javax.cache.uri">hazelcast.xml</property>
+            <!-- property name="hibernate.javax.cache.provider">com.hazelcast.cache.impl.HazelcastServerCachingProvider</property -->
+            <!-- property name="hibernate.javax.cache.uri">hazelcast.xml</property -->
 
             <!-- Client Mode -->
-            <!-- property name="hibernate.javax.cache.provider">com.hazelcast.client.cache.impl.HazelcastClientCachingProvider</property -->
-            <!-- property name="hibernate.javax.cache.uri">hazelcast-client.xml</property -->
+            <property name="hibernate.javax.cache.provider">com.hazelcast.client.cache.impl.HazelcastClientCachingProvider</property>
+            <property name="hibernate.javax.cache.uri">hazelcast-client.xml</property>
 
 
         <!-- Display all executed SQL to stdout -->
@@ -50,7 +50,6 @@
 
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create</property>
-
 
         <!-- Mapping to hibernate mapping files -->
         <mapping class="jcache.L2C.test.entity.Item"/>

@@ -13,13 +13,15 @@ import java.util.List;
  */
 public class DatabaseEntitiesTest extends HibernateTestBase {
 
+
     public DatabaseEntitiesTest() {
         super(false);
     }
 
     @Test
     public void testItemsOnDatabaseStartUp(){
-        Session session = sfUtil.getSession();
+
+        Session session = sfUtil.getSessionFactory().openSession();
 
         List<Item> items = session.createQuery("SELECT i from Item i ").getResultList();
 
@@ -29,15 +31,14 @@ public class DatabaseEntitiesTest extends HibernateTestBase {
             Assert.assertTrue(i.getName().equals("item-"+i.getId()));
         }
 
-        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCacheHitCount());
-        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCacheMissCount());
-        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCachePutCount());
+        session.close();
+
     }
 
     @Test
     public void testSubItemsOnDatabaseStartUp(){
 
-        Session session = sfUtil.getSession();
+        Session session = sfUtil.getSessionFactory().openSession();
 
         List<SubItem> subItems = session.createQuery("SELECT si from SubItem si ").getResultList();
 
@@ -47,16 +48,14 @@ public class DatabaseEntitiesTest extends HibernateTestBase {
             Assert.assertTrue(si.getName().equals("subitem-"+si.getId()));
         }
 
-    }
+        session.close();
 
+    }
 
     @Test
     public void testSubItemRelationsOfItems(){
-        Session session = sfUtil.getSession();
 
-        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCacheHitCount());
-        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCacheMissCount());
-        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCachePutCount());
+        Session session = sfUtil.getSessionFactory().openSession();
 
         Item item1 = session.get(Item.class,1);
         Item item2 = session.get(Item.class,2);
@@ -73,10 +72,8 @@ public class DatabaseEntitiesTest extends HibernateTestBase {
         Assert.assertEquals(3,item3.getSubItems().size());
         Assert.assertEquals(4,item4.getSubItems().size());
 
+        session.close();
 
-        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCacheHitCount());
-        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCacheMissCount());
-        System.out.println(session.getSessionFactory().getStatistics().getSecondLevelCachePutCount());
     }
 }
 

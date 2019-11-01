@@ -18,7 +18,6 @@
         <property name="hibernate.dialect">org.hibernate.dialect.H2Dialect</property>
 
         <property name="hibernate.generate_statistics">true</property>
-        <property name="hibernate.cache.use_minimal_puts">true</property>
         <property name="hibernate.cache.use_query_cache">true</property>
 
         <!-- Enable Hibernate's automatic session context management -->

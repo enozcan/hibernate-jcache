@@ -2,19 +2,44 @@ package jcache.L2C.test;
 
 import jcache.L2C.test.entity.Item;
 import jcache.L2C.test.entity.SubItem;
+import jcache.L2C.test.util.SessionFactoryUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.stat.CacheRegionStatistics;
+import org.hibernate.stat.Statistics;
 import org.junit.After;
 
 public class HibernateTestBase {
 
     public final SessionFactoryUtil sfUtil;
 
+    public Statistics stats;
+
+    public CacheRegionStatistics itemCacheStats;
+
+    public CacheRegionStatistics subItemCacheStats;
+
+    public CacheRegionStatistics collectionCacheStats;
+
     HibernateTestBase(boolean useHazelcastClient){
         sfUtil = new SessionFactoryUtil(useHazelcastClient);
         insertEntries();
+        stats = sfUtil.getStats();
+        itemCacheStats = stats.getCacheRegionStatistics("Item-Cache");
+        subItemCacheStats = stats.getCacheRegionStatistics("SubItem-Cache");
+        collectionCacheStats = stats.getCacheRegionStatistics("SubItems-Collection-Cache");
+    }
+
+    @After
+    public void reset(){
+        // Evicts all cache regions and clear stats instead of
+        // shutting down and creating a new SF & HZ for each test
+        sfUtil.resetCache();
     }
 
     public void insertEntries(){
+
+        Session session = sfUtil.getSessionFactory().openSession();
 
         Item item1 = new Item("item-1",1);
         Item item2 = new Item("item-2",2);
@@ -37,25 +62,19 @@ public class HibernateTestBase {
         item3.addSubItem(subItem4).addSubItem(subItem5).addSubItem(subItem6);
         item4.addSubItem(subItem7).addSubItem(subItem8).addSubItem(subItem9).addSubItem(subItem10);
 
-        Session session = sfUtil.getSession();
+
+
         session.save(item1);
         session.save(item2);
         session.save(item3);
         session.save(item4);
 
-        sfUtil.commit();
-        sfUtil.changeSession();
+        Transaction tx = session.beginTransaction();
+        tx.commit();
+        session.close();
+
         sfUtil.resetCache();
 
     }
-
-
-    @After
-    public void reset(){
-        // Evicts all cache regions instead of than shutting down and creating a
-        // new SF & HZ for each test
-        sfUtil.resetCache();
-    }
-
 
 }
