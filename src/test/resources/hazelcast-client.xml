@@ -23,5 +23,8 @@
         <name>hibernate_test_cluster</name>
         <password>password</password>
     </group>
-
+    <network>
+        <connection-attempt-limit>10</connection-attempt-limit>
+        <connection-attempt-period>3000</connection-attempt-period>
+    </network>
 </hazelcast-client>

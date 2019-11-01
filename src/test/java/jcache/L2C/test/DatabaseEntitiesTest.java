@@ -1,5 +1,6 @@
 package jcache.L2C.test;
 
+import jcache.L2C.test.base.HibernateTestBase;
 import jcache.L2C.test.entity.Item;
 import jcache.L2C.test.entity.SubItem;
 import org.hibernate.Session;

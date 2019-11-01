@@ -11,7 +11,7 @@
     <instance-name>hibernate_test_instance</instance-name>
 
 
-    <management-center enabled="true">
+    <management-center enabled="false">
         http://localhost:8080/hazelcast-mancenter
     </management-center>
 

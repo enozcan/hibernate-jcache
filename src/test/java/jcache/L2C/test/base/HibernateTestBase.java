@@ -1,4 +1,4 @@
-package jcache.L2C.test;
+package jcache.L2C.test.base;
 
 import jcache.L2C.test.entity.Item;
 import jcache.L2C.test.entity.SubItem;
@@ -21,7 +21,7 @@ public class HibernateTestBase {
 
     public CacheRegionStatistics collectionCacheStats;
 
-    HibernateTestBase(boolean useHazelcastClient){
+    public HibernateTestBase(boolean useHazelcastClient){
         sfUtil = new SessionFactoryUtil(useHazelcastClient);
         insertEntries();
         stats = sfUtil.getStats();

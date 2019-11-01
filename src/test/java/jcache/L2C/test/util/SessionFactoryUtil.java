@@ -22,14 +22,12 @@ public class SessionFactoryUtil {
     private SessionFactory createSessionFactory() {
         Configuration configuration = new Configuration();
         String hibernateConfigURL;
+
+        Hazelcast.shutdownAll();
+
         if (useHazelcastClient) {
              hibernateConfigURL = "client-hibernate.cfg.xml";
              Hazelcast.newHazelcastInstance();
-            try {
-             Thread.sleep(10000);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         } else {
             hibernateConfigURL = "server-hibernate.cfg.xml";
         }

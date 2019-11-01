@@ -13,7 +13,6 @@
         <hibernate.version>5.4.3.Final</hibernate.version>
     </properties>
 
-
     <dependencies>
         <dependency>
             <groupId>com.hazelcast</groupId>
@@ -56,6 +55,8 @@
             <artifactId>h2</artifactId>
             <version>1.4.194</version>
         </dependency>
+
+
     </dependencies>
 
 </project>
