@@ -1,7 +1,7 @@
 # Using Jcache SPI for using Hazelcast as L2C for Hibernate
 
 This is an alternative approach of using `Hazelcast-hibernate` plugin to use Hazelcast as caching provider for Hibernate.
-The plugin can be found [here](www.github.com/hazelcast/hazelcast/hibernate5). Also, distributed query cache 
+The plugin can be found [here](https://www.github.com/hazelcast/hazelcast-hibernate5). Also, distributed query cache 
 which is not supported by the plugin can be used this way. 
 
 ## About Jcache
