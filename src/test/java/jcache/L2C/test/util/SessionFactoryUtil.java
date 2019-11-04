@@ -20,16 +20,20 @@ public class SessionFactoryUtil {
 
 
     private SessionFactory createSessionFactory() {
+
+        // -DtestType=[ jcache | plugin ]
+        final String testingType = System.getProperty("testType");
+
         Configuration configuration = new Configuration();
         String hibernateConfigURL;
 
         Hazelcast.shutdownAll();
 
         if (useHazelcastClient) {
-             hibernateConfigURL = "client-hibernate.cfg.xml";
+             hibernateConfigURL = testingType + "-client-hibernate.cfg.xml";
              Hazelcast.newHazelcastInstance();
         } else {
-            hibernateConfigURL = "server-hibernate.cfg.xml";
+            hibernateConfigURL = testingType + "-server-hibernate.cfg.xml";
         }
 
         configuration.configure(hibernateConfigURL);
