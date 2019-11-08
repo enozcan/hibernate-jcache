@@ -1,9 +1,11 @@
 package jcache.L2C.util;
 
+import com.hazelcast.cache.CacheStatistics;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.stat.CacheRegionStatistics;
 import org.hibernate.stat.Statistics;
 
 public class HibernateUtil {
@@ -31,6 +33,7 @@ public class HibernateUtil {
     public static void evictAllRegions(){
         assert !sessionFactory.isClosed();
         sessionFactory.getCache().evictAllRegions();
+        sessionFactory.getStatistics().clear();
     }
 
     public static void closeFactory(){
@@ -40,5 +43,26 @@ public class HibernateUtil {
 
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    public static void printStats(){
+        System.out.println("[L2C Hits]: " + sessionFactory.getStatistics().getSecondLevelCacheHitCount());
+        System.out.println("[L2C Miss]: " + sessionFactory.getStatistics().getSecondLevelCacheMissCount());
+        System.out.println("[L2C Put]: " + sessionFactory.getStatistics().getSecondLevelCachePutCount());
+    }
+
+    public static void printQueryCacheStats(){
+        System.out.println("[Query Cache Hits]: " + sessionFactory.getStatistics().getQueryCacheHitCount());
+        System.out.println("[Query Cache Miss]: " + sessionFactory.getStatistics().getQueryCacheMissCount());
+        System.out.println("[Query Cache Put]: " + sessionFactory.getStatistics().getQueryCachePutCount());
+    }
+
+    public static void printCollectionCacheStats(){
+        CacheRegionStatistics cs = HibernateUtil.getSessionFactory().getStatistics().getCacheRegionStatistics("SubItems-Collection-Cache");
+        System.out.println("[Collection Cache Hits]: " + cs.getHitCount());
+        System.out.println("[Collection Cache Miss]: " + cs.getMissCount());
+        System.out.println("[Collection Cache Put]: " + cs.getPutCount());
+
+
     }
 }

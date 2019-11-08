@@ -1,7 +1,7 @@
 package jcache.L2C.test.base;
 
-import jcache.L2C.test.entity.Item;
-import jcache.L2C.test.entity.SubItem;
+import jcache.L2C.entity.Item;
+import jcache.L2C.entity.SubItem;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.stat.CacheRegionStatistics;
@@ -23,23 +23,22 @@ public class QueryCacheTestBase extends HibernateTestBase {
     }
 
     @Test
-    public void queryMissPutAndHitTest(){
+    public void queryCacheBasicMissPutAndHitTest(){
 
         Session session = sfUtil.getSessionFactory().openSession();
 
+        @SuppressWarnings("unchecked")
         List<Item> itemList =  session.createQuery(ITEM_QUERY_STRING)
                 .setCacheable(true)
                 .setCacheRegion("Item-Query-Cache").list();
 
         CacheRegionStatistics itemQueryCacheStats = stats.getQueryRegionStatistics("Item-Query-Cache");
 
-
         Assert.assertEquals(2,itemList.size());
 
         Assert.assertEquals(1,itemQueryCacheStats.getMissCount());
         Assert.assertEquals(1,itemQueryCacheStats.getPutCount());
         Assert.assertEquals(0,itemQueryCacheStats.getHitCount());
-
 
         session.close();
 
@@ -55,10 +54,11 @@ public class QueryCacheTestBase extends HibernateTestBase {
     }
 
     @Test
-    public void subitemQueryAndUpdateTest(){
+    public void queryCacheUpdateThenPutTest(){
 
         Session session = sfUtil.getSessionFactory().openSession();
 
+        @SuppressWarnings("unchecked")
         List<SubItem> subitemList =  session.createQuery(SUBITEM_QUERY_STRING)
                 .setCacheable(true)
                 .setCacheRegion("SubItem-Query-Cache").list();

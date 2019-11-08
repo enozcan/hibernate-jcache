@@ -1,7 +1,7 @@
 package jcache.L2C.test.base;
 
-import jcache.L2C.test.entity.Item;
-import jcache.L2C.test.entity.SubItem;
+import jcache.L2C.entity.Item;
+import jcache.L2C.entity.SubItem;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
@@ -17,7 +17,7 @@ public class EntityCacheTestBase extends HibernateTestBase {
     }
 
     @Test
-    public void missThenPutAndHitTest(){
+    public void entityCacheBasicMissPutAndHitTest(){
 
         Session session = sfUtil.getSessionFactory().openSession();
 
@@ -50,7 +50,7 @@ public class EntityCacheTestBase extends HibernateTestBase {
     }
 
     @Test
-    public void updateAndHitTest(){
+    public void entityCacheUpdatePutAndHitTest(){
 
         Session session = sfUtil.getSessionFactory().openSession();
 
@@ -77,7 +77,7 @@ public class EntityCacheTestBase extends HibernateTestBase {
     }
 
     @Test
-    public void putCollectionEntitiesIntoOwnCacheTest(){
+    public void entityCachePutCollectionEntitiesIntoCacheTest(){
 
         Session session = sfUtil.getSessionFactory().openSession();
 
@@ -100,8 +100,5 @@ public class EntityCacheTestBase extends HibernateTestBase {
         Assert.assertEquals(0,subItemCacheStats.getMissCount());
 
     }
-
-
-
 
 }

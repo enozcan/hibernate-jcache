@@ -1,8 +1,6 @@
 package jcache.L2C.test.util;
 
-
 import com.hazelcast.core.Hazelcast;
-
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.stat.Statistics;
@@ -23,6 +21,10 @@ public class SessionFactoryUtil {
 
         // -DtestType=[ jcache | plugin ]
         final String testingType = System.getProperty("testType");
+
+        if(!testingType.equals("jcache") && !testingType.equals("plugin")){
+            throw new IllegalArgumentException("Provide a valid testing method: -DtestType=[ jcache | plugin ]");
+        }
 
         Configuration configuration = new Configuration();
         String hibernateConfigURL;
@@ -53,38 +55,5 @@ public class SessionFactoryUtil {
     public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
-
-    /*
-
-    private void shutdown() {
-        try {
-            //transaction.rollback();
-            session.close();
-            sessionFactory.close();
-            Hazelcast.shutdownAll();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    public Session getActiveSession(){
-        return this.session.isOpen() ? this.session : null;
-    }
-
-    public Session createNewSession(){
-        //if (session != null && session.isOpen()) session.close();
-        session = sessionFactory.openSession();
-        return session;
-    }
-
-    public void commit() {
-        if(!session.isOpen()) return;
-        Transaction tx = session.beginTransaction();
-        tx.commit();
-    }
-
-    public void closeSession(){
-        if (!session.isOpen()) session.close();
-    }*/
-
 
 }

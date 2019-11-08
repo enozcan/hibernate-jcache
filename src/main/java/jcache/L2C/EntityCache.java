@@ -11,53 +11,48 @@ public class EntityCache {
     public static void main(String[] args){
 
         Session session1, session2, session3, session4;
-        Transaction tx1, tx2, tx3, tx4;
-        Item item;
+        Transaction tx1;
 
-
-        // Store an hazelcast.hibernate.jcache.Entity.Item with id = 1
+        // Store an hazelcast.hibernate.jcache.L2C.Entity.Item with id = 1
         // L2C put is expected
         session1 = HibernateUtil.getSession();
         tx1 = session1.getTransaction();
         tx1.begin();
-        session1.save(new Item(1,"New Hazelcast Item",12345L));
+        session1.save(new Item("item-1",1));
         tx1.commit();
         session1.close();
+
+        // Evict cache and clear statistics
         HibernateUtil.evictAllRegions();
 
-        // Get recently stored value
-        // Data is expected to be fetched from L2 Cache, not from database.
-        // L2C hit is expected
+        // Get recently stored value. Since the cache is evicted,
+        // data is expected to be fetched from DB, not from the cache.
+        // L2C miss & put are expected
         session2 = HibernateUtil.getSession();
-        tx2 = session2.getTransaction();
-        tx2.begin();
-        item = session2.get(Item.class,1);
+        session2.beginTransaction();
+        session2.get(Item.class,1);
         session2.close();
-        System.out.println("Item fetched: "+ item);
+        HibernateUtil.printStats();
 
         // Get last accessed data from another session.
         // Data is expected to be fetched from L2 Cache, not from database.
         // L2C hit is expected
         session3 = HibernateUtil.getSession();
-        tx3 = session3.getTransaction();
-        tx3.begin();
-        item = session3.get(Item.class,1);
-        System.out.println("Item fetched: "+ item);
-        tx3.commit();
+        session3.beginTransaction();
+        session3.get(Item.class,1);
         session3.close();
+        HibernateUtil.printStats();
 
-        // Evict the cache
+        // Evict the cache and clear statistics
         HibernateUtil.evictAllRegions();
 
         // Data is expected to be fetched from database, not from L2C.
         // L2C miss & put are expected
         session4 = HibernateUtil.getSession();
-        tx4 = session4.getTransaction();
-        tx4.begin();
-        item = session4.get(Item.class,1);
-        System.out.println("Item fetched: "+ item);
-        tx4.commit();
+        session4.beginTransaction();;
+        session4.get(Item.class,1);
         session4.close();
+        HibernateUtil.printStats();
 
         HibernateUtil.closeFactory();
         Hazelcast.shutdownAll();

@@ -1,8 +1,8 @@
 package jcache.L2C;
 
 import com.hazelcast.core.Hazelcast;
-import jcache.L2C.util.HibernateUtil;
 import jcache.L2C.entity.Item;
+import jcache.L2C.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.List;
@@ -18,53 +18,46 @@ public class QueryCache {
 
         Session session1, session2, session3, session4;
         Transaction tx1;
-        List<Item> queryResults;
 
         // Store Items with id = 100,101 and 102
-        // L2C miss and put are expected
         session1 = HibernateUtil.getSession();
         tx1 = session1.getTransaction();
         tx1.begin();
-        session1.save(new Item(100,"New Hazelcast Item-0",12345L));
-        session1.save(new Item(101,"New Hazelcast Item-1",12345L));
-        session1.save(new Item(102,"New Hazelcast Item-2",12345L));
+        session1.save(new Item("New Hazelcast Item-0",100));
+        session1.save(new Item("New Hazelcast Item-1",101));
+        session1.save(new Item("New Hazelcast Item-2",102));
         tx1.commit();
         session1.close();
 
+        // Evict cache and clear statistics
         HibernateUtil.evictAllRegions();
 
         // Get recently stored values via query.
         // Data is expected to be fetched from database, not from L2C since evicted.
-        // QueryCache miss is expected
+        // QueryCache miss & put are expected
         session2 = HibernateUtil.getSession();
-        queryResults =  executeQuery(QUERY_STRING,session2);
-        printList(queryResults);
+        executeQuery(QUERY_STRING,session2);
         session2.close();
+        HibernateUtil.printQueryCacheStats();
 
         // Execute last executed query again from another session.
         // Data is expected to be fetched from query Cache, not from database.
         // QueryCache hit is expected
         session3 = HibernateUtil.getSession();
-        queryResults =  executeQuery(QUERY_STRING,session3);
-        printList(queryResults);
+        executeQuery(QUERY_STRING,session3);
         session3.close();
+        HibernateUtil.printQueryCacheStats();
 
-        // Execute last executed query again from another session.
-        // Data is expected to be fetched from query Cache, not from database.
-        // QueryCache hit is expected
+        // Execute last different query.
+        // QueryCache miss & put are expected
         session4 = HibernateUtil.getSession();
-        queryResults =  executeQuery(QUERY_STRING2,session4);
-        printList(queryResults);
+        executeQuery(QUERY_STRING2,session4);
         session4.close();
+        HibernateUtil.printQueryCacheStats();
+
+        // Tear down
         HibernateUtil.closeFactory();
         Hazelcast.shutdownAll();
-    }
-
-    private static void printList(List<Item> list){
-        System.out.println("Items fetched: ");
-        for(Item i : list) {
-            System.out.println(i);
-        }
     }
 
     private static List<Item> executeQuery(String query, Session session){

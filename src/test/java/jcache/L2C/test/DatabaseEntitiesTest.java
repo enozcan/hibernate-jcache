@@ -1,8 +1,8 @@
 package jcache.L2C.test;
 
 import jcache.L2C.test.base.HibernateTestBase;
-import jcache.L2C.test.entity.Item;
-import jcache.L2C.test.entity.SubItem;
+import jcache.L2C.entity.Item;
+import jcache.L2C.entity.SubItem;
 import org.hibernate.Session;
 import org.junit.Assert;
 import org.junit.Test;
@@ -24,6 +24,7 @@ public class DatabaseEntitiesTest extends HibernateTestBase {
 
         Session session = sfUtil.getSessionFactory().openSession();
 
+        @SuppressWarnings("unchecked")
         List<Item> items = session.createQuery("SELECT i from Item i ").getResultList();
 
         Assert.assertEquals(4,items.size());
@@ -41,6 +42,7 @@ public class DatabaseEntitiesTest extends HibernateTestBase {
 
         Session session = sfUtil.getSessionFactory().openSession();
 
+        @SuppressWarnings("unchecked")
         List<SubItem> subItems = session.createQuery("SELECT si from SubItem si ").getResultList();
 
         Assert.assertEquals(10,subItems.size());

@@ -1,7 +1,7 @@
 package jcache.L2C.test.base;
 
-import jcache.L2C.test.entity.Item;
-import jcache.L2C.test.entity.SubItem;
+import jcache.L2C.entity.Item;
+import jcache.L2C.entity.SubItem;
 import jcache.L2C.test.util.SessionFactoryUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -61,8 +61,6 @@ public class HibernateTestBase {
         item2.addSubItem(subItem2).addSubItem(subItem3);
         item3.addSubItem(subItem4).addSubItem(subItem5).addSubItem(subItem6);
         item4.addSubItem(subItem7).addSubItem(subItem8).addSubItem(subItem9).addSubItem(subItem10);
-
-
 
         session.save(item1);
         session.save(item2);

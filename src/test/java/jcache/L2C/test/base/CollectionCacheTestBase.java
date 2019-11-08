@@ -1,7 +1,7 @@
 package jcache.L2C.test.base;
 
-import jcache.L2C.test.entity.Item;
-import jcache.L2C.test.entity.SubItem;
+import jcache.L2C.entity.Item;
+import jcache.L2C.entity.SubItem;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.Assert;
@@ -16,7 +16,7 @@ public class CollectionCacheTestBase extends HibernateTestBase {
     }
 
     @Test
-    public void cacheCollectionsWhenOwnerObjectIsFetchedP2PTest(){
+    public void collectionCacheHitWhenOwnerIsFetchedTest(){
 
         Item item;
 
@@ -46,7 +46,7 @@ public class CollectionCacheTestBase extends HibernateTestBase {
     }
 
     @Test
-    public void collectionCacheUpdateP2PTest(){
+    public void collectionCacheUpdateAndPutTest(){
 
         Session session = sfUtil.getSessionFactory().openSession();
 
@@ -63,7 +63,6 @@ public class CollectionCacheTestBase extends HibernateTestBase {
         Assert.assertEquals(1,collectionCacheStats.getPutCount());
 
         Assert.assertEquals(2,subItemCacheStats.getPutCount());
-
 
         session = sfUtil.getSessionFactory().openSession();
         item = session.get(Item.class,1);

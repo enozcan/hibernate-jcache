@@ -13,8 +13,8 @@ L2C can be used for SessionFactory objects in Hibernate.
 
 ## Dependencies
 
-- Include `hibernate-jcache` dependency in your program. The version must be the same as
-the `hibernate-core` version. 
+- Include `hibernate-jcache` dependency in your program. The version must be the same as 
+`hibernate-core` version. 
 
 In `pom.xml`:
 ```xml

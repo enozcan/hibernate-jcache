@@ -37,8 +37,8 @@
         <property name="hbm2ddl.auto">create</property>
 
         <!-- Mapping to hibernate mapping files -->
-        <mapping class="jcache.L2C.test.entity.Item"/>
-        <mapping class="jcache.L2C.test.entity.SubItem"/>
+        <mapping class="jcache.L2C.entity.Item"/>
+        <mapping class="jcache.L2C.entity.SubItem"/>
 
     </session-factory>
 </hibernate-configuration>

@@ -1,14 +1,11 @@
 package jcache.L2C;
 
 import com.hazelcast.core.Hazelcast;
+import jcache.L2C.entity.Item;
+import jcache.L2C.entity.SubItem;
 import jcache.L2C.util.HibernateUtil;
-import jcache.L2C.entity.Department;
-import jcache.L2C.entity.Employee;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CollectionCache {
 
@@ -17,37 +14,34 @@ public class CollectionCache {
         initializeDatabase();
 
         Session session1, session2;
-        Transaction tx1, tx2;
+        Item item;
 
-        // Get Department from DB.
-        // This call will not get employees list.
-        // It has to be called explicitly.
+
+        // Get Item from DB.
+        // Collection cache miss & put are expected
         session1 = HibernateUtil.getSession();
-        tx1 = session1.getTransaction();
-        tx1.begin();
-        Department department = session1.get(Department.class, 1);
-        System.out.println("Department :" + department.getName());
-        // Call collection for cached department. Cache miss is expected.
-        List<Employee> employees=department.getEmployees();
-        for (Employee employee : employees) {
-            System.out.println("\tEmployee Name : " + employee.getName());
-        }
-        session1.close();
+        session1.beginTransaction();
+        item = session1.get(Item.class, 1);
 
-        //Get Department again. Cache hit is expected.
+        // Since fetch type for the collection is Lazy, force it to be fetched.
+        for(SubItem i : item.getSubItems()){
+            System.out.println(i);
+        };
+        session1.close();
+        HibernateUtil.printCollectionCacheStats();
+
+        //Get Department again. Collection cache hit is expected.
         session2 = HibernateUtil.getSession();
-        tx2 = session2.getTransaction();
-        tx2.begin();
-        department = session2.get(Department.class, 1);
-        System.out.println("Department :" + department.getName());
-        // Call collection for cached department. Cache hit is expected since
-        // it has already cached in session1.
-        // No SQL queries must be shown on the log.
-        employees = department.getEmployees();
-        for (Employee employee : employees) {
-            System.out.println("\tEmployee Name : " + employee.getName());
-        }
+        session2.beginTransaction();
+        item = session2.get(Item.class, 1);
+
+        // Since fetch type for the collection is Lazy, force it to be fetched.
+        for(SubItem i : item.getSubItems()){
+            System.out.println(i);
+        };
         session2.close();
+        HibernateUtil.printCollectionCacheStats();
+
         HibernateUtil.closeFactory();
         Hazelcast.shutdownAll();
 
@@ -55,24 +49,21 @@ public class CollectionCache {
 
     private static void initializeDatabase(){
 
-        Session session;
-        Transaction transaction;
+        Session session = HibernateUtil.getSession();
 
-        Department dpt = new Department("Department 1", null);
+        Item item1 = new Item("item-1",1);
 
-        Employee employee1 = new Employee("Employee 1", dpt);
-        Employee employee2 = new Employee("Employee 2", dpt);
 
-        List<Employee> employeeList = new ArrayList<Employee>();
-        employeeList.add(employee1);
-        employeeList.add(employee2);
-        dpt.setEmployees(employeeList);
+        SubItem subItem1 = new SubItem(1,"subitem-1",item1);
+        SubItem subItem2 = new SubItem(2,"subitem-2",item1);
 
-        session = HibernateUtil.getSession();
-        transaction = session.getTransaction();
-        transaction.begin();
-        session.save(dpt);
-        transaction.commit();
+        item1.addSubItem(subItem1).addSubItem(subItem2);
+
+        Transaction tx = session.beginTransaction();
+
+        session.save(item1);
+
+        tx.commit();
         session.close();
         HibernateUtil.evictAllRegions();
     }
